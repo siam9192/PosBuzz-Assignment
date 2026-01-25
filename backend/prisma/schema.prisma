@@ -22,6 +22,7 @@ model User {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  @@map("users")
 }
 
 
@@ -37,6 +38,8 @@ model Product {
 
   // Relations
   sales Sales[]
+  
+  @@map("products")
 }
 
 
@@ -51,4 +54,6 @@ model Sales {
 
   // Relations
   product Product @relation(fields: [product_id],references: [id])
+
+  @@map("sales")
 }

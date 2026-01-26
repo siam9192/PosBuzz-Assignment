@@ -1,12 +1,11 @@
-import { RequestUser } from "."
-
+import { RequestUser } from '.';
 
 declare global {
   namespace Express {
     interface Request {
-      user: RequestUser
+      user: RequestUser;
     }
   }
 }
 
-export {}
+export {};

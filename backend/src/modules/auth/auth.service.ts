@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import bcryptHelper from 'src/common/helpers/bycrypt.helper';
 import jwtHelper from 'src/common/helpers/jwt.helper';
 import envConfig from 'src/common/lib/envConfig';
-import {RequestUser } from 'src/common/types';
+import { RequestUser } from 'src/common/types';
 import redisClient from 'src/common/lib/redis';
 import { User } from 'generated/prisma/client';
 
@@ -76,41 +76,38 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-async getMe(reqUser: RequestUser) {
-  const key = `user:${reqUser.id}`;
+  async getMe(reqUser: RequestUser) {
+    const key = `user:${reqUser.id}`;
 
-  let user: User | null = null;
+    let user: User | null = null;
 
-  
-  const redisUser = await redisClient.get(key);
-  if (redisUser) {
-    user = JSON.parse(redisUser);
-  }
-
-
-  if (!user) {
-    user = await prisma.user.findUnique({
-      where: {
-        id: reqUser.id,
-      },
-    });
-
-    // Cache in Redis
-    if (user) {
-      await redisClient.set(
-        key,
-        JSON.stringify(user),
-        { EX: 60 * 5 } // cache for 5 minutes
-      );
+    const redisUser = await redisClient.get(key);
+    if (redisUser) {
+      user = JSON.parse(redisUser);
     }
+
+    if (!user) {
+      user = await prisma.user.findUnique({
+        where: {
+          id: reqUser.id,
+        },
+      });
+
+      // Cache in Redis
+      if (user) {
+        await redisClient.set(
+          key,
+          JSON.stringify(user),
+          { EX: 60 * 5 }, // cache for 5 minutes
+        );
+      }
+    }
+
+    //  Not found
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
   }
-
-  //  Not found
-  if (!user) {
-    throw new HttpException("User not found", HttpStatus.NOT_FOUND);
-  }
-
-  return user;
-}
-
 }

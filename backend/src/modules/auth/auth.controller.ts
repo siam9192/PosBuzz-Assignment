@@ -15,8 +15,7 @@ import envConfig from 'src/common/lib/envConfig';
 import { parseDurationMs } from 'src/common/helpers/utils.helper';
 import { ENVIRONMENT } from 'src/common/types';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import  type { Request, Response } from 'express';
-
+import type { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +33,10 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto, @Res({ passthrough: true }) res:Response) {
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const result = await this.authService.login(dto);
 
     res.cookie('accessToken', result.accessToken, {
@@ -72,12 +74,12 @@ export class AuthController {
   @Get('me')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  async getMe(@Req() req:Request) {
-    const result = await this.authService.getMe(req.user)
+  async getMe(@Req() req: Request) {
+    const result = await this.authService.getMe(req.user);
     return {
       success: true,
       message: 'Current user successful',
-      data:result
+      data: result,
     };
   }
 }

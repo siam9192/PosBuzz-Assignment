@@ -31,7 +31,7 @@ model Product {
   id String @id @default(uuid())
   name String @db.VarChar(200)
   sku String @db.VarChar(50) @unique
-  price Int
+  price Float
   stock_quantity Int
 
   created_at DateTime @default(now())
@@ -48,7 +48,7 @@ model Sales {
   id String @id @default(uuid())
   product_id String 
   quantity Int
-  total_price Int
+  total_price Float
   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

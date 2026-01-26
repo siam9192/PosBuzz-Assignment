@@ -39,7 +39,7 @@ export class UpdateProductDto {
   @IsNotEmpty({ message: 'SKU is required' })
   @MaxLength(50, { message: 'SKU must not exceed 50 characters' })
   sku: string;
-  
+
   @IsOptional()
   @IsNumber({}, { message: 'Price must be a number' })
   @Min(0, { message: 'Price cannot be less than 0' })

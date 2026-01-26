@@ -38,13 +38,13 @@ model Product {
   updated_at DateTime @updatedAt
 
   // Relations
-  sales Sales[]
+  sales Sale[]
   
   @@map("products")
 }
 
 
-model Sales {
+model Sale {
   id String @id @default(uuid())
   product_id String 
   quantity Int

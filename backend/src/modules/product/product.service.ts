@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { prisma } from 'src/common/lib/prisma';
 import { ProductsFilterQuery } from './product.interface';
@@ -29,11 +33,11 @@ export class ProductService {
         id,
       },
       select: {
-        id: true
+        id: true,
       },
     });
 
-    if (!product) throw new ForbiddenException('Product not found');
+    if (!product) throw new NotFoundException('Product not found');
 
     return await prisma.product.update({
       where: {
@@ -53,10 +57,11 @@ export class ProductService {
       },
     });
 
-    if (!product) throw new ForbiddenException('Product not found');
+    if (!product) throw new NotFoundException('Product not found');
 
     return await prisma.product.delete({ where: { id } });
   }
+
   async findAll(
     filterQuery: ProductsFilterQuery,
     paginationOpt: PaginationOptions,

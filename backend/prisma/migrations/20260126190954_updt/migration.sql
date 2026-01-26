@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "products" ALTER COLUMN "price" SET DATA TYPE DOUBLE PRECISION;
+
+-- AlterTable
+ALTER TABLE "sales" ALTER COLUMN "total_price" SET DATA TYPE DOUBLE PRECISION;

@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
 
+
 export class CreateSaleDTO {
   @IsString({ message: 'Product ID must be a string' })
   @IsNotEmpty({ message: 'Product ID is required' })

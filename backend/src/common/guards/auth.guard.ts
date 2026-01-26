@@ -2,12 +2,15 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import jwtHelper from '../helpers/jwt.helper';
 import envConfig from '../lib/envConfig';
 import { Request } from 'express';
 import { prisma } from '../lib/prisma';
+import { User } from 'generated/prisma/browser';
+import redisClient from '../lib/redis';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,12 +35,35 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { id: true },
-    });
+    const key = `user:${decoded.id}`;
+
+    let user: User | null = null;
+
+    const redisUser = await redisClient.get(key);
+    if (redisUser) {
+      user = JSON.parse(redisUser);
+    }
+
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      user = await prisma.user.findUnique({
+        where: {
+          id: decoded.id,
+        },
+      });
+
+      // Cache in Redis
+      if (user) {
+         redisClient.set(
+          key,
+          JSON.stringify(user),
+          { EX: 60 * 10 }, // cache for 10 minutes
+        );
+      }
+    }
+
+    //  Not found
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
 
     request.user = { id: user.id };
@@ -45,3 +71,4 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
+

@@ -1,5 +1,3 @@
-
-
 export function parseDurationMs(value: string): number {
   const match = value.match(/^(\d+)(ms|s|m|h|d)$/);
   if (!match) throw new Error('Invalid duration');

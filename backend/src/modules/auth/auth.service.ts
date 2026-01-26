@@ -1,10 +1,12 @@
-import { prisma } from 'src/lib/prisma';
+import { prisma } from 'src/common/lib/prisma';
 import { LoginDto, RegisterDto } from './auth.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import bcryptHelper from 'src/helpers/bycrypt.helper';
-import jwtHelper from 'src/helpers/jwt.helper';
-import envConfig from 'src/lib/envConfig';
-
+import bcryptHelper from 'src/common/helpers/bycrypt.helper';
+import jwtHelper from 'src/common/helpers/jwt.helper';
+import envConfig from 'src/common/lib/envConfig';
+import {RequestUser } from 'src/common/types';
+import redisClient from 'src/common/lib/redis';
+import { User } from 'generated/prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
         'User already exist using email',
         HttpStatus.FORBIDDEN,
       );
-    
+
     const password_hash = bcryptHelper.hash(dto.password);
     return await prisma.user.create({
       data: {
@@ -32,10 +34,10 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const {email,password} = dto
+    const { email, password } = dto;
     const user = await prisma.user.findUnique({
       where: {
-        email
+        email,
       },
     });
 
@@ -44,17 +46,19 @@ export class AuthService {
         'User already exist using email',
         HttpStatus.FORBIDDEN,
       );
-    
 
     // Compare password
     const isPasswordValid =
       user && (await bcryptHelper.compare(password, user.password_hash));
 
     if (!user || !isPasswordValid) {
-      throw new HttpException('Invalid email or password',HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.FORBIDDEN,
+      );
     }
 
-    const tokenPayload = { id: user.id};
+    const tokenPayload = { id: user.id };
 
     // Generate access token
     const accessToken = jwtHelper.generateToken(
@@ -62,7 +66,51 @@ export class AuthService {
       envConfig.jwt.access_token_secret as string,
       envConfig.jwt.access_token_expire as string,
     );
-    return { accessToken};
+
+    // Generate Refresh
+    const refreshToken = jwtHelper.generateToken(
+      tokenPayload,
+      envConfig.jwt.refresh_token_secret as string,
+      envConfig.jwt.refresh_token_expire as string,
+    );
+    return { accessToken, refreshToken };
   }
+
+async getMe(reqUser: RequestUser) {
+  const key = `user:${reqUser.id}`;
+
+  let user: User | null = null;
+
+  
+  const redisUser = await redisClient.get(key);
+  if (redisUser) {
+    user = JSON.parse(redisUser);
+  }
+
+
+  if (!user) {
+    user = await prisma.user.findUnique({
+      where: {
+        id: reqUser.id,
+      },
+    });
+
+    // Cache in Redis
+    if (user) {
+      await redisClient.set(
+        key,
+        JSON.stringify(user),
+        { EX: 60 * 5 } // cache for 5 minutes
+      );
+    }
+  }
+
+  //  Not found
+  if (!user) {
+    throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+  }
+
+  return user;
 }
 
+}

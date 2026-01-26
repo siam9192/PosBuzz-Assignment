@@ -5,7 +5,7 @@ export class AppController {
   @Get()
   getHello() {
     return {
-      message:"Welcome To PosBuzz Server"
-    }
+      message: 'Welcome To PosBuzz Server',
+    };
   }
 }

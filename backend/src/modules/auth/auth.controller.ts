@@ -78,7 +78,7 @@ export class AuthController {
     const result = await this.authService.getMe(req.user);
     return {
       success: true,
-      message: 'Current user successful',
+      message: 'Current user retrieved successfully',
       data: result,
     };
   }

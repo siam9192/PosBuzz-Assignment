@@ -71,7 +71,7 @@ export class ProductController {
     return {
       success: true,
       message: 'Products retrieved successfully',
-      data: result,
+      ...result
     };
   }
 }

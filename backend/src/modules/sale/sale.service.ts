@@ -20,10 +20,12 @@ export class SaleService {
       },
     });
 
+    // Check product existence by SKU
     if (!product) throw new NotFoundException('Product not found');
 
     const stockAvailable = product.stock_quantity >= dto.quantity;
-
+    
+   // Check product stock availability 
     if (!stockAvailable)
       throw new ForbiddenException('Required stock not available');
 

@@ -5,8 +5,7 @@ import bcryptHelper from 'src/common/helpers/bycrypt.helper';
 import jwtHelper from 'src/common/helpers/jwt.helper';
 import envConfig from 'src/common/lib/envConfig';
 import { RequestUser } from 'src/common/types';
-import redisClient from 'src/common/lib/redis';
-import { User } from 'generated/prisma/client';
+
 
 @Injectable()
 export class AuthService {
@@ -77,33 +76,14 @@ export class AuthService {
   }
 
   async getMe(reqUser: RequestUser) {
-    const key = `user:${reqUser.id}`;
 
-    let user: User | null = null;
-
-    const redisUser = await redisClient.get(key);
-    if (redisUser) {
-      user = JSON.parse(redisUser);
-    }
-
-    if (!user) {
-      user = await prisma.user.findUnique({
+     const user = await prisma.user.findUnique({
         where: {
           id: reqUser.id,
         },
       });
 
-      // Cache in Redis
-      if (user) {
-        await redisClient.set(
-          key,
-          JSON.stringify(user),
-          { EX: 60 * 5 }, // cache for 5 minutes
-        );
-      }
-    }
-
-    //  Not found
+    // Check user existence
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }

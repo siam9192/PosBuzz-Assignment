@@ -15,12 +15,14 @@ import { Prisma } from 'generated/prisma/browser';
 @Injectable()
 export class ProductService {
   async create(dto: CreateProductDto) {
+
     const isExistBySKU = (await prisma.product.findUnique({
       where: {
         sku: dto.sku,
       },
     }))!!;
-
+   
+    // Check product existence by SKU
     if (isExistBySKU) throw new ForbiddenException('SKU already exist');
     return await prisma.product.create({
       data: dto,
@@ -37,6 +39,7 @@ export class ProductService {
       },
     });
 
+    // Check product existence
     if (!product) throw new NotFoundException('Product not found');
 
     return await prisma.product.update({
@@ -56,7 +59,8 @@ export class ProductService {
         id: true,
       },
     });
-
+    
+    // Check product existence by SKU
     if (!product) throw new NotFoundException('Product not found');
 
     return await prisma.product.delete({ where: { id } });

@@ -9,7 +9,6 @@ import jwtHelper from '../helpers/jwt.helper';
 import envConfig from '../lib/envConfig';
 import { Request } from 'express';
 import { prisma } from '../lib/prisma';
-import { User } from 'generated/prisma/browser';
 import redisClient from '../lib/redis';
 
 @Injectable()
@@ -37,7 +36,7 @@ export class AuthGuard implements CanActivate {
 
     const key = `user:${decoded.id}`;
 
-    let user: User | null = null;
+    let user: {id:string} | null = null;
 
     const redisUser = await redisClient.get(key);
     if (redisUser) {
@@ -49,6 +48,9 @@ export class AuthGuard implements CanActivate {
         where: {
           id: decoded.id,
         },
+        select:{
+          id:true
+        }
       });
 
       // Cache in Redis

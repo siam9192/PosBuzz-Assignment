@@ -1,18 +1,11 @@
 import React from 'react'
 import Provider from './providers/Provider';
-import Container from './components/Container';
-import RegistrationPage from './pages/RegistrationPage';
-import LoginPage from './pages/LoginPage';
+import Router from './router';
 
 const App: React.FC = () => (
- 
   <Provider>
-   <Container>
-    {/* <RegistrationPage/> */}
-    <LoginPage/>
-   </Container>
+   <Router/>
   </Provider>
-
 );
 
 export default App;

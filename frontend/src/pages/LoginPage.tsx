@@ -15,7 +15,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="registration-page" style={{ padding: "50px" }}>
+    <div className="login-page" style={{ padding: "50px" }}>
       <Row gutter={50} justify="center" align="middle">
         {/* Image Column */}
         <Col xs={24} md={12}>

@@ -3,6 +3,20 @@
 :root {
   --font-primary: "Roboto", sans-serif;
   --font-secondary: "Poppins", sans-serif;
+
+  /* Breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1600px;
+
+  /* Font sizes */
+  --font-title-xs: 20px;
+  --font-title-sm: 12px;
+  --font-title-md: 32px;
+  --font-title-lg: 100px;
 }
 
 body {
@@ -27,6 +41,7 @@ span,
   font-family: var(--font-secondary);
 }
 
+
 /* Container  */
 .container {
     max-width: 1400px;
@@ -36,10 +51,35 @@ span,
 
 
 
-.registration-page {
+.registration-page,.login-page {
   min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+
+.title {
+  font-size: var(--font-title-xs) ; 
+}
+
+/* Small screens */
+@media (min-width: var(--breakpoint-sm)) {
+  .title {
+    font-size: var(--font-title-sm) ;
+  }
+}
+
+/* Medium screens */
+@media (min-width: var(--breakpoint-md)) {
+  .title {
+    font-size: var(--font-title-md) ;
+  }
+}
+
+/* Large screens */
+@media (min-width: var(--breakpoint-lg)) {
+  .title {
+    font-size: var(--font-title-large) ;
+  }
+}

@@ -1,0 +1,51 @@
+
+/* Container  */
+.container {
+    max-width: 1400px;
+    margin:auto;
+    padding: 5px;
+}
+
+
+
+.registration-page,.login-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.font-primary {
+ font-family: var(--font-primary);
+}
+
+
+.font-secondary {
+ font-family: var(--font-secondary);
+}
+
+
+.title {
+  font-size: var(--font-title-xs) ; 
+}
+
+/* Small screens */
+@media (min-width: var(--breakpoint-sm)) {
+  .title {
+    font-size: var(--font-title-sm) ;
+  }
+}
+
+/* Medium screens */
+@media (min-width: var(--breakpoint-md)) {
+  .title {
+    font-size: var(--font-title-md) ;
+  }
+}
+
+/* Large screens */
+@media (min-width: var(--breakpoint-lg)) {
+  .title {
+    font-size: var(--font-title-large) ;
+  }
+}

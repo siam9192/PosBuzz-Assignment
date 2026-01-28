@@ -1,12 +1,11 @@
-import ProductsList from "../components/ProductsList"
-
+import ProductsList from "../components/ProductsList";
 
 function MainPage() {
   return (
     <div>
-      <ProductsList/>
+      <ProductsList />
     </div>
-  )
+  );
 }
 
-export default MainPage
+export default MainPage;

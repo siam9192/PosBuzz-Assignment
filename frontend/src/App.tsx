@@ -1,10 +1,10 @@
-import React from 'react'
-import Provider from './providers/Provider';
-import Router from './router';
-
+import React from "react";
+import Provider from "./providers/Provider";
+import Router from "./router";
+import "./App.css";
 const App: React.FC = () => (
   <Provider>
-   <Router/>
+    <Router />
   </Provider>
 );
 

@@ -1,8 +1,8 @@
-import { ConfigProvider } from 'antd'
-import type { ReactNode } from 'react'
+import { ConfigProvider } from "antd";
+import type { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 function ThemeProvider({ children }: Props) {
@@ -12,29 +12,29 @@ function ThemeProvider({ children }: Props) {
         token: {
           fontSize: 14,
           lineHeight: 1.6,
-         
-          /* ===== Brand ===== */
-          colorPrimary: '#1677ff',
-          colorPrimaryText:'#f5f7fa',
-           
-          colorInfo: '#6366f1',
-          colorInfoText: '#ffffff',
 
-          colorError: '#ef4444',
-          colorErrorText: '#ffffff',
+          /* ===== Brand ===== */
+          colorPrimary: "#1677ff",
+          colorPrimaryText: "#f5f7fa",
+
+          colorInfo: "#6366f1",
+          colorInfoText: "#ffffff",
+
+          colorError: "#ef4444",
+          colorErrorText: "#ffffff",
 
           /* ===== Background ===== */
-          colorBgBase: '#f5f7fa',
-          colorBgLayout: '#f0f2f5',
-          colorBgContainer: '#ffffff',
+          colorBgBase: "#f5f7fa",
+          colorBgLayout: "#f0f2f5",
+          colorBgContainer: "#ffffff",
 
           /* ===== Text ===== */
-          colorTextBase: '#13171d',
-          colorTextSecondary: '#6b7280',
+          colorTextBase: "#13171d",
+          colorTextSecondary: "#6b7280",
 
           /* ===== Borders ===== */
           borderRadius: 8,
-          colorBorder: '#e5e7eb',
+          colorBorder: "#e5e7eb",
 
           /* ===== Controls ===== */
           controlHeight: 40,
@@ -43,7 +43,7 @@ function ThemeProvider({ children }: Props) {
     >
       {children}
     </ConfigProvider>
-  )
+  );
 }
 
-export default ThemeProvider
+export default ThemeProvider;

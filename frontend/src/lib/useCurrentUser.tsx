@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { User } from "../types/user.type";
 import { getMe } from "../api-services/auth.api";
@@ -18,15 +12,14 @@ type ContextValue = {
 const CurrentUserContext = createContext<ContextValue | null>(null);
 
 function CurrentUserProvider({ children }: { children: ReactNode }) {
-  const { data, isLoading,isPending } = useQuery({
+  const { data, isLoading, isPending } = useQuery({
     queryKey: ["me"],
     queryFn: getMe,
-    refetchOnWindowFocus:false
+    refetchOnWindowFocus: false,
   });
 
   const [user, setUser] = useState<User | null>(null);
 
-  
   useEffect(() => {
     if (data) {
       setUser(data.data);
@@ -37,7 +30,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
     <CurrentUserContext.Provider
       value={{
         user,
-        isLoading:isLoading||isPending,
+        isLoading: isLoading || isPending,
         setUser,
       }}
     >

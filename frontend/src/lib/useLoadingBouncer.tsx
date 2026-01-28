@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 function useLoadingBouncer(loading: boolean, delay = 200) {
   const [visible, setVisible] = useState(loading);
   const timerRef = useRef<any | null>(null);
-  
+
   useEffect(() => {
-    
-   if(loading) {
-      timerRef.current = setTimeout(() => {
-        setVisible(false);
-      }, delay);
-   }
-    
+    timerRef.current = setTimeout(() => {
+      setVisible(false);
+    }, delay);
+
     return () => {
       clearTimeout(timerRef.current);
     };
   }, [loading, delay]);
-  
+
   return visible;
 }
 

@@ -1,14 +1,14 @@
-import type { ReactNode } from 'react'
-import ThemeProvider from './ThemeProvider'
-import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ToastContainer } from 'react-toastify'
-import {App as AntdApp}  from "antd"
-import CurrentUserProvider from '../lib/useCurrentUser'
+import type { ReactNode } from "react";
+import ThemeProvider from "./ThemeProvider";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import { App as AntdApp } from "antd";
+import CurrentUserProvider from "../lib/useCurrentUser";
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient();
 function Provider({ children }: Props) {
   return (
     <ThemeProvider>
@@ -26,5 +26,4 @@ function Provider({ children }: Props) {
   );
 }
 
-
-export default Provider
+export default Provider;

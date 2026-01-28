@@ -1,16 +1,10 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
 interface Props {
-    children:ReactNode
+  children: ReactNode;
 }
-function Container({children}:Props) {
-  return (
-   <div className="container">
-     {
-        children
-     }
-   </div>
-  )
+function Container({ children }: Props) {
+  return <div className="container">{children}</div>;
 }
 
-export default Container
+export default Container;

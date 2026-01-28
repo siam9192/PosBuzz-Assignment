@@ -4,25 +4,22 @@ import { register } from "../api-services/auth.api";
 import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { message } = App.useApp();
 
-  const {mutate,isPending} = useMutation({
-    mutationFn:register,
-    onSuccess(data){
-    message.success(data.message)
-    navigate("/login")
+  const { mutate, isPending } = useMutation({
+    mutationFn: register,
+    onSuccess(data) {
+      message.success(data.message);
+      navigate("/login");
     },
-    onError(err){
-      message.error(err.message)
-    }
-  })
-
-  
+    onError(err) {
+      message.error(err.message);
+    },
+  });
 
   return (
     <div className="registration-page" style={{ padding: "50px" }}>
-     
       <Row gutter={50} justify="center" align="middle">
         {/* Image Column */}
         <Col xs={24} md={12}>
@@ -36,21 +33,15 @@ function RegistrationPage() {
         {/* Form Column */}
         <Col xs={24} md={12}>
           <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-            <Typography.Title level={2}  className="title" >Register Now</Typography.Title>
+            <Typography.Title level={2} className="title">
+              Register Now
+            </Typography.Title>
 
-            <Form
-              layout="vertical"
-              onFinish={mutate}
-              initialValues={{ remember: true }}
-
-            >
+            <Form layout="vertical" onFinish={mutate} initialValues={{ remember: true }}>
               <Form.Item
                 label="Full Name"
                 name="name"
-                rules={[
-                  { required: true,max:30, message: "Please enter your full name" },
-                   
-                ]}
+                rules={[{ required: true, max: 30, message: "Please enter your full name" }]}
               >
                 <Input placeholder="John Doe" />
               </Form.Item>
@@ -85,9 +76,7 @@ function RegistrationPage() {
                     validator: (_, value) =>
                       value
                         ? Promise.resolve()
-                        : Promise.reject(
-                            new Error("You must agree to the terms and conditions")
-                          ),
+                        : Promise.reject(new Error("You must agree to the terms and conditions")),
                   },
                 ]}
               >
@@ -95,12 +84,7 @@ function RegistrationPage() {
               </Form.Item>
 
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  loading={isPending}
-                  block
-                >
+                <Button type="primary" htmlType="submit" loading={isPending} block>
                   Register
                 </Button>
               </Form.Item>

@@ -1,26 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
-import { Col, Row, Typography, Form, Input, Button,App } from "antd";
+import { Col, Row, Typography, Form, Input, Button, App } from "antd";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api-services/auth.api";
 import { queryClient } from "../providers/Provider";
 
 function LoginPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { message } = App.useApp();
 
-  const {mutate,isPending} = useMutation({
-    mutationFn:login,
-    onSuccess(data){
-    message.success(data.message)
-    queryClient.invalidateQueries({queryKey:["me"]})
-    setTimeout(()=>{
-      navigate("/")
-    },1000)
+  const { mutate, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess(data) {
+      message.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     },
-    onError(err){
-      message.error(err.message)
-    }
-  })
+    onError(err) {
+      message.error(err.message);
+    },
+  });
 
   return (
     <div className="login-page" style={{ padding: "50px" }}>
@@ -37,14 +37,9 @@ function LoginPage() {
         {/* Form Column */}
         <Col xs={24} md={12}>
           <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-            <Typography.Title level={2} >Login Now</Typography.Title>
+            <Typography.Title level={2}>Login Now</Typography.Title>
 
-            <Form
-              layout="vertical"
-              onFinish={mutate}
-              initialValues={{ remember: true }}
-            >
-             
+            <Form layout="vertical" onFinish={mutate} initialValues={{ remember: true }}>
               <Form.Item
                 label="Email"
                 name="email"
@@ -53,35 +48,26 @@ function LoginPage() {
                   { type: "email", message: "Please enter a valid email" },
                 ]}
               >
-                <Input  placeholder="example@email.com" />
+                <Input placeholder="example@email.com" />
               </Form.Item>
 
               <Form.Item
                 label="Password"
                 name="password"
-                rules={[
-                  { required: true, message: "Please enter your password" }
-                ]}
+                rules={[{ required: true, message: "Please enter your password" }]}
               >
                 <Input.Password placeholder="Enter password" />
               </Form.Item>
 
-        
-
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  loading={isPending}
-                  block
-                >
+                <Button type="primary" htmlType="submit" loading={isPending} block>
                   Login
                 </Button>
               </Form.Item>
             </Form>
 
             <Typography.Text>
-            Don't have an account? <a href="/register">Register here</a>
+              Don't have an account? <a href="/register">Register here</a>
             </Typography.Text>
           </div>
         </Col>

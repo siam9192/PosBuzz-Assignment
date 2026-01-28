@@ -1,8 +1,7 @@
 export interface RegisterPayload {
-    name:string
-    email:string
-    password:string
+  name: string;
+  email: string;
+  password: string;
 }
 
-
-export type LoginPayload = Omit<RegisterPayload,"name"> 
+export type LoginPayload = Omit<RegisterPayload, "name">;

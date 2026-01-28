@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Col, Row, Typography, Form, Input, Button,App } from "antd";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api-services/auth.api";
+import { queryClient } from "../providers/Provider";
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -11,7 +12,10 @@ function LoginPage() {
     mutationFn:login,
     onSuccess(data){
     message.success(data.message)
-    navigate("/")
+    queryClient.invalidateQueries({queryKey:["me"]})
+    setTimeout(()=>{
+      navigate("/")
+    },1000)
     },
     onError(err){
       message.error(err.message)

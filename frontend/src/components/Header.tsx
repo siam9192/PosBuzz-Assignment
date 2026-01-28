@@ -1,20 +1,24 @@
-import { Typography, Button, Menu, Dropdown, Grid, Flex, Avatar } from "antd";
-import { MenuOutlined, UserOutlined } from "@ant-design/icons";
+import { Typography, Button,Grid, Flex, Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import Container from "./Container";
-
-import { Link } from "react-router-dom";
+import { useCurrentUser } from "../lib/useCurrentUser";
+import type { User } from "../types/user.type";
+import { IoIosLogOut } from "react-icons/io";
+import Cookies from "js-cookie";
 
 const { useBreakpoint } = Grid;
 
 function Header() {
   const screens = useBreakpoint(); 
-
-  const menuItems = [
-    { label: <Link to="/">Home</Link>, key: "home" },
-    { label: <Link to="/register">Register</Link>, key: "register" },
-    { label: <Link to="/login">Login</Link>, key: "login" },
-    { label: <Link to="/about">About</Link>, key: "about" },
-  ];
+  
+  const userHook = useCurrentUser()
+  const user = userHook.user as User
+   
+  function logout () {
+    Cookies.remove("accessToken",{path:"/",domain:"localhost"})
+    Cookies.remove("refreshToken",{path:"/",domain:"localhost"})
+    userHook.setUser(null)
+  }
 
   return (
     <header
@@ -38,7 +42,7 @@ function Header() {
             style={{
               margin: 0,
               color: "#1890ff",
-              fontSize: screens.xs ? "28px" : "32px", // responsive font size
+              fontSize: screens.xs ? "28px" : "32px"
             }}
           >
             PossBuzz
@@ -46,11 +50,11 @@ function Header() {
        <Flex align="center" gap={20}>
          <Flex align="center" gap={5}>
           <Avatar style={{ backgroundColor: '#87d068' }} size="large" icon={<UserOutlined />} />
-          <Typography.Text strong>Siam Hasan...</Typography.Text>
+          <Typography.Text strong >{user.name}</Typography.Text>
          </Flex>
-          {/* <Button type="primary" size="middle" danger>
-                Logout
-          </Button> */}
+          <Button onClick={logout}  size="large"  type="dashed" danger >
+               <IoIosLogOut size={24} />
+          </Button>
 
        </Flex>
         </div>

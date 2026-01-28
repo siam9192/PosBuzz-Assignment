@@ -57,8 +57,6 @@ const columns: TableProps<Product>['columns'] = [
   },
 ];
 
-const data: Product[] = demo.map(p => ({ ...p, key: p.id }));
-
 const { useBreakpoint } = Grid;
 
 export default function ProductsList() {

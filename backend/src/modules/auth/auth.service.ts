@@ -6,7 +6,6 @@ import jwtHelper from 'src/common/helpers/jwt.helper';
 import envConfig from 'src/common/lib/envConfig';
 import { RequestUser } from 'src/common/types';
 
-
 @Injectable()
 export class AuthService {
   async register(dto: RegisterDto) {
@@ -76,12 +75,11 @@ export class AuthService {
   }
 
   async getMe(reqUser: RequestUser) {
-
-     const user = await prisma.user.findUnique({
-        where: {
-          id: reqUser.id,
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        id: reqUser.id,
+      },
+    });
 
     // Check user existence
     if (!user) {

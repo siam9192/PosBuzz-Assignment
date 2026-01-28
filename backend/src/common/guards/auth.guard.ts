@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
 
     const key = `user:${decoded.id}`;
 
-    let user: {id:string} | null = null;
+    let user: { id: string } | null = null;
 
     const redisUser = await redisClient.get(key);
     if (redisUser) {
@@ -48,14 +48,14 @@ export class AuthGuard implements CanActivate {
         where: {
           id: decoded.id,
         },
-        select:{
-          id:true
-        }
+        select: {
+          id: true,
+        },
       });
 
       // Cache in Redis
       if (user) {
-         redisClient.set(
+        redisClient.set(
           key,
           JSON.stringify(user),
           { EX: 60 * 10 }, // cache for 10 minutes
@@ -73,4 +73,3 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
-

@@ -38,28 +38,26 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(dto);
-
-    res.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
+    
+    const commonOptions =  {
+        httpOnly: true,
       secure:
         envConfig.environment?.toLocaleLowerCase() === ENVIRONMENT.PRODUCTION,
       sameSite:
         envConfig.environment?.toLowerCase() === ENVIRONMENT.PRODUCTION
           ? 'none'
-          : 'lax',
+          : 'lax'
+    }
+
+    res.cookie('accessToken', result.accessToken, {
+     ...commonOptions as any,
       maxAge: parseDurationMs(
         envConfig.jwt.access_token_expire as string,
       ) as number,
     });
 
     res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure:
-        envConfig.environment?.toLocaleLowerCase() === ENVIRONMENT.PRODUCTION,
-      sameSite:
-        envConfig.environment?.toLowerCase() === ENVIRONMENT.PRODUCTION
-          ? 'none'
-          : 'lax',
+       ...commonOptions as any,
       maxAge: parseDurationMs(
         envConfig.jwt.refresh_token_expire as string,
       ) as number,
@@ -68,6 +66,17 @@ export class AuthController {
     return {
       success: true,
       message: 'Login successful',
+    };
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    return {
+      success: true,
+      message: 'Logout successful',
     };
   }
 

@@ -35,12 +35,24 @@ export class ProductService {
       },
       select: {
         id: true,
+        sku: true,
       },
     });
 
     // Check product existence
     if (!product) throw new NotFoundException('Product not found');
 
+    // Check SKU existence for new SKU
+    if (dto.sku && dto.sku !== product.sku) {
+      const isExistBySKU = (await prisma.product.findUnique({
+        where: {
+          sku: dto.sku,
+        },
+      }))!!;
+
+      // Check product existence by SKU
+      if (isExistBySKU) throw new ForbiddenException('SKU already exist');
+    }
     return await prisma.product.update({
       where: {
         id,

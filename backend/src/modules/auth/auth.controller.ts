@@ -38,26 +38,26 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(dto);
-    
-    const commonOptions =  {
-        httpOnly: true,
+
+    const commonOptions = {
+      httpOnly: true,
       secure:
         envConfig.environment?.toLocaleLowerCase() === ENVIRONMENT.PRODUCTION,
       sameSite:
         envConfig.environment?.toLowerCase() === ENVIRONMENT.PRODUCTION
           ? 'none'
-          : 'lax'
-    }
+          : 'lax',
+    };
 
     res.cookie('accessToken', result.accessToken, {
-     ...commonOptions as any,
+      ...(commonOptions as any),
       maxAge: parseDurationMs(
         envConfig.jwt.access_token_expire as string,
       ) as number,
     });
 
     res.cookie('refreshToken', result.refreshToken, {
-       ...commonOptions as any,
+      ...(commonOptions as any),
       maxAge: parseDurationMs(
         envConfig.jwt.refresh_token_expire as string,
       ) as number,
@@ -77,6 +77,44 @@ export class AuthController {
     return {
       success: true,
       message: 'Logout successful',
+    };
+  }
+
+  @Get('tokens')
+  @HttpCode(HttpStatus.OK)
+  async getNewTokensByRefreshToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.getNewTokensByRefreshToken(
+      req.cookies.refreshToken,
+    );
+    const commonOptions = {
+      httpOnly: true,
+      secure:
+        envConfig.environment?.toLocaleLowerCase() === ENVIRONMENT.PRODUCTION,
+      sameSite:
+        envConfig.environment?.toLowerCase() === ENVIRONMENT.PRODUCTION
+          ? 'none'
+          : 'lax',
+    };
+
+    res.cookie('accessToken', result.accessToken, {
+      ...(commonOptions as any),
+      maxAge: parseDurationMs(
+        envConfig.jwt.access_token_expire as string,
+      ) as number,
+    });
+
+    res.cookie('refreshToken', result.refreshToken, {
+      ...(commonOptions as any),
+      maxAge: parseDurationMs(
+        envConfig.jwt.refresh_token_expire as string,
+      ) as number,
+    });
+    return {
+      success: true,
+      message: 'Tokens retrieved successfully',
     };
   }
 

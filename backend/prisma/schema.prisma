@@ -54,7 +54,7 @@ model Sale {
   updated_at DateTime @updatedAt
 
   // Relations
-  product Product @relation(fields: [product_id],references: [id])
+  product Product @relation(fields: [product_id],references: [id],onDelete: Cascade)
 
   @@map("sales")
 }

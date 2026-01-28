@@ -12,6 +12,8 @@ const envConfig = {
   environment: process.env.ENVIRONMENT,
   url: {
     database: process.env.DATABASE_URL,
+    redis_db: process.env.REDIS_DB_URL,
+    client_origin: process.env.CLIENT_ORIGIN,
   },
 
   jwt: {

@@ -5,11 +5,12 @@ import redisClient from './common/lib/redis';
 import cookieParser from 'cookie-parser';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import envConfig from './common/lib/envConfig';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3000'],
+    origin: [envConfig.url.client_origin],
     credentials: true,
   });
   app.useGlobalPipes(

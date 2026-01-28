@@ -25,7 +25,9 @@ const items = (product: Product): MenuProps['items'] => [
 ];
 
 const columns: TableProps<Product>['columns'] = [
-  { title: 'Name', dataIndex: 'name', key: 'name', render: text => <Typography.Text strong>{text}</Typography.Text> },
+  { title: 'Name', dataIndex: 'name', key: 'name', render: text => <div style={{minWidth:"200px"}}>
+    <Typography.Text strong>{text}</Typography.Text>
+  </div> },
   { title: 'SKU', dataIndex: 'sku', key: 'sku', render: text => <Typography.Text>{text}</Typography.Text> },
   { title: 'Price', dataIndex: 'price', key: 'price', render: text => <Typography.Text>${text}</Typography.Text> },
   { title: 'Stock Quantity', dataIndex: 'stock_quantity', key: 'stock_quantity', render: text => <Typography.Text>{text}</Typography.Text> },
@@ -49,7 +51,7 @@ const { useBreakpoint } = Grid;
 
 export default function ProductsList() {
   const screens = useBreakpoint();
-  const isMobile = screens.xs || screens.sm || screens.md;
+  const isMobile = screens.xs 
 
   return (
     <div>
@@ -68,7 +70,7 @@ export default function ProductsList() {
         <Typography.Text>Showing 10 of 100 products</Typography.Text>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '10px 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
         <AddProductModal />
       </div>
 

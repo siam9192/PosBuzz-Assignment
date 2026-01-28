@@ -1,5 +1,5 @@
-import { Typography, Button, Menu, Dropdown, Grid } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import { Typography, Button, Menu, Dropdown, Grid, Flex, Avatar } from "antd";
+import { MenuOutlined, UserOutlined } from "@ant-design/icons";
 import Container from "./Container";
 
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ function Header() {
   return (
     <header
       style={{
-        padding: "16px 0",
+        padding: "10px 0",
         borderBottom: "1px solid #f0f0f0",
         backgroundColor: "#fff",
       }}
@@ -38,15 +38,21 @@ function Header() {
             style={{
               margin: 0,
               color: "#1890ff",
-              fontSize: screens.xs ? "20px" : "32px", // responsive font size
+              fontSize: screens.xs ? "28px" : "32px", // responsive font size
             }}
           >
             PossBuzz
           </Typography.Title>
-
-           <Button type="primary" size="large" danger>
+       <Flex align="center" gap={20}>
+         <Flex align="center" gap={5}>
+          <Avatar style={{ backgroundColor: '#87d068' }} size="large" icon={<UserOutlined />} />
+          <Typography.Text strong>Siam Hasan...</Typography.Text>
+         </Flex>
+          {/* <Button type="primary" size="middle" danger>
                 Logout
-            </Button>
+          </Button> */}
+
+       </Flex>
         </div>
       </Container>
     </header>

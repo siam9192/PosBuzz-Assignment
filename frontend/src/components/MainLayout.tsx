@@ -8,7 +8,9 @@ function MainLayout() {
     <div>
      <Header/>
      <Container>
-     <Outlet/>
+     <div style={{padding:"20px 0"}}>
+        <Outlet/>
+     </div>
     </Container>
     </div>
   )

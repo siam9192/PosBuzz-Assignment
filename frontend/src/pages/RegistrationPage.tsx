@@ -1,28 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
 import { Col, Row, Typography, Form, Input, Button, Checkbox, message } from "antd";
 import { useState } from "react";
+import { register } from "../api-services/auth.api";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
-  const onFinish = (values: any) => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      message.success("Registration Successful!");
-      console.log("Form Values:", values);
-    }, 1500);
-  };
+
+  const {mutate,isPending} = useMutation({
+    mutationFn:register,
+    onSuccess(data){
+
+   navigate("/")
+    },
+    onError(err){
+       console.log(err.message)
+    }
+  })
+
+  
 
   return (
     <div className="registration-page" style={{ padding: "50px" }}>
+     
       <Row gutter={50} justify="center" align="middle">
         {/* Image Column */}
         <Col xs={24} md={12}>
           <img
-
-          
-            src="https://static.vecteezy.com/system/resources/thumbnails/003/689/228/small/online-registration-or-sign-up-login-for-account-on-smartphone-app-user-interface-with-secure-password-mobile-application-for-ui-web-banner-access-cartoon-people-illustration-vector.jpg"
+            src="https://thumbs.dreamstime.com/b/sign-page-abstract-concept-vector-illustration-enter-application-mobile-screen-user-login-form-website-interface-ui-new-profile-203016094.jpg"
             alt="Registration"
             style={{ width: "100%", borderRadius: "10px" }}
           />
@@ -35,14 +41,16 @@ function RegistrationPage() {
 
             <Form
               layout="vertical"
-              onFinish={onFinish}
+              onFinish={mutate}
               initialValues={{ remember: true }}
+
             >
               <Form.Item
                 label="Full Name"
-                name="fullName"
+                name="name"
                 rules={[
-                  { required: true, message: "Please enter your full name" },
+                  { required: true,max:30, message: "Please enter your full name" },
+                   
                 ]}
               >
                 <Input placeholder="John Doe" />
@@ -91,7 +99,7 @@ function RegistrationPage() {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
+                  loading={isPending}
                   block
                 >
                   Register

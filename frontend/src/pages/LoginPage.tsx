@@ -20,7 +20,7 @@ function LoginPage() {
         {/* Image Column */}
         <Col xs={24} md={12}>
           <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/003/689/228/small/online-registration-or-sign-up-login-for-account-on-smartphone-app-user-interface-with-secure-password-mobile-application-for-ui-web-banner-access-cartoon-people-illustration-vector.jpg"
+            src="https://static.vecteezy.com/system/resources/previews/001/991/652/non_2x/sign-in-page-flat-design-concept-illustration-icon-account-login-user-login-abstract-metaphor-can-use-for-landing-page-mobile-app-ui-posters-banners-free-vector.jpg"
             alt="Registration"
             style={{ width: "100%", borderRadius: "10px" }}
           />

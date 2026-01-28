@@ -1,21 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
-import { Col, Row, Typography, Form, Input, Button, Checkbox, message } from "antd";
-import { useState } from "react";
+import { Col, Row, Typography, Form, Input, Button, Checkbox, App } from "antd";
 import { register } from "../api-services/auth.api";
 import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
   const navigate = useNavigate()
-
+  const { message } = App.useApp();
 
   const {mutate,isPending} = useMutation({
     mutationFn:register,
     onSuccess(data){
-
-   navigate("/")
+    message.success(data.message)
+    navigate("/login")
     },
     onError(err){
-       console.log(err.message)
+      message.error(err.message)
     }
   })
 

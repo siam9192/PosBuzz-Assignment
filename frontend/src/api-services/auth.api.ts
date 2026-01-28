@@ -14,7 +14,7 @@ export async function register (payload:RegisterPayload) {
 }
 
 
-export async function Login (payload:LoginPayload) {
+export async function login (payload:LoginPayload) {
   try {
    const res =  await axiosInstance.post<Response<null>>("/auth/login",payload)
    return res.data

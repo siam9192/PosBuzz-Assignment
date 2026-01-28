@@ -1,9 +1,12 @@
-import { Button, Dropdown, Grid, Space, Table, Typography, type MenuProps, type TableProps } from "antd";
+import { Button, Dropdown, Grid, Table, Typography, type MenuProps, type TableProps } from "antd";
 import type { Product } from "../types/product.type";
 import { SlOptionsVertical } from "react-icons/sl";
 import AddProductModal from "./AddProductModal";
 import EditProductModal from "./EditProductModal";
 import CreateSaleModal from "./CreateSaleModal";
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "../api-services/product.api";
+import { useState } from "react";
 
 const demo: Product[] = [
   { id: "1", name: "Wireless Mouse", sku: "WM-001", price: 25.99, stock_quantity: 120, created_at: "2026-01-28T08:00:00Z", updated_at: "2026-01-28T08:00:00Z" },
@@ -28,10 +31,19 @@ const columns: TableProps<Product>['columns'] = [
   { title: 'Name', dataIndex: 'name', key: 'name', render: text => <div style={{minWidth:"200px"}}>
     <Typography.Text strong>{text}</Typography.Text>
   </div> },
-  { title: 'SKU', dataIndex: 'sku', key: 'sku', render: text => <Typography.Text>{text}</Typography.Text> },
-  { title: 'Price', dataIndex: 'price', key: 'price', render: text => <Typography.Text>${text}</Typography.Text> },
-  { title: 'Stock Quantity', dataIndex: 'stock_quantity', key: 'stock_quantity', render: text => <Typography.Text>{text}</Typography.Text> },
-  { title: 'Created At', dataIndex: 'created_at', key: 'created_at', render: date => <Typography.Text>{new Date(date).toLocaleString()}</Typography.Text> },
+  { title: 'SKU', dataIndex: 'sku', key: 'sku', render: text => <div style={{minWidth:"100px"}}>
+    <Typography.Text >{text}</Typography.Text>
+  </div> },
+  { title: 'Price', dataIndex: 'price', key: 'price', render: text => <div style={{minWidth:"100px"}}>
+    <Typography.Text >{text}</Typography.Text>
+  </div> },
+  { title: 'Stock Quantity', dataIndex: 'stock_quantity', key: 'stock_quantity', render: text => <div style={{minWidth:"100px"}}>
+    <Typography.Text  >{text}</Typography.Text>
+  </div> },
+  { title: 'Created At', dataIndex: 'created_at', key: 'created_at', render: date =>
+    <div style={{minWidth:"100px"}}>
+      <Typography.Text>{new Date(date).toLocaleString()}</Typography.Text>
+    </div>  },
   {
     title: 'Action',
     key: 'action',
@@ -50,8 +62,22 @@ const data: Product[] = demo.map(p => ({ ...p, key: p.id }));
 const { useBreakpoint } = Grid;
 
 export default function ProductsList() {
+  
   const screens = useBreakpoint();
   const isMobile = screens.xs 
+  const [page,setPage]= useState(1)
+  const [limit,setLimit]  = useState(10)
+
+ const {data,isLoading} = useQuery({
+  queryKey:["products"],
+  queryFn:()=>getProducts({page,limit})
+ })
+
+ const products =  data?.data ??[]
+ const meta = data?.meta
+ const tableData =  products.map(_=>({key:_.id,..._}))
+ 
+
 
   return (
     <div>
@@ -75,7 +101,17 @@ export default function ProductsList() {
       </div>
 
       <div style={{ overflowX: 'auto' }}>
-        <Table<Product> columns={columns} dataSource={data} style={{ marginTop: 20 }} />
+        <Table<Product> columns={columns} loading={isLoading} dataSource={tableData} style={{ marginTop: 20 }} pagination={{
+          pageSize:10,
+          showSizeChanger:true,
+          pageSizeOptions:[10,20,50],
+          showTotal: (total) => `Total ${total} items`,
+          total:meta?.total??10,
+          onChange(page,size){
+           setPage(page)
+           setLimit(size)
+          }
+        }} />
       </div>
     </div>
   );

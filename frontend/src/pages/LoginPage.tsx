@@ -1,18 +1,22 @@
-import { Col, Row, Typography, Form, Input, Button, Checkbox, message } from "antd";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Col, Row, Typography, Form, Input, Button,App } from "antd";
+import { useNavigate } from "react-router-dom";
+import { login } from "../api-services/auth.api";
 
 function LoginPage() {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+  const { message } = App.useApp();
 
-  const onFinish = (values: any) => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      message.success("Registration Successful!");
-      console.log("Form Values:", values);
-    }, 1500);
-  };
+  const {mutate,isPending} = useMutation({
+    mutationFn:login,
+    onSuccess(data){
+    message.success(data.message)
+    navigate("/")
+    },
+    onError(err){
+      message.error(err.message)
+    }
+  })
 
   return (
     <div className="login-page" style={{ padding: "50px" }}>
@@ -33,7 +37,7 @@ function LoginPage() {
 
             <Form
               layout="vertical"
-              onFinish={onFinish}
+              onFinish={mutate}
               initialValues={{ remember: true }}
             >
              
@@ -45,15 +49,14 @@ function LoginPage() {
                   { type: "email", message: "Please enter a valid email" },
                 ]}
               >
-                <Input placeholder="example@email.com" />
+                <Input  placeholder="example@email.com" />
               </Form.Item>
 
               <Form.Item
                 label="Password"
                 name="password"
                 rules={[
-                  { required: true, message: "Please enter your password" },
-                  { min: 6, message: "Password must be at least 6 characters" },
+                  { required: true, message: "Please enter your password" }
                 ]}
               >
                 <Input.Password placeholder="Enter password" />
@@ -65,7 +68,7 @@ function LoginPage() {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
+                  loading={isPending}
                   block
                 >
                   Login

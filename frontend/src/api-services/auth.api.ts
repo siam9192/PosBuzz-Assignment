@@ -33,6 +33,17 @@ export async function logout() {
   }
 }
 
+
+export async function getNewTokensByRefreshToken () {
+   try {
+   await axiosInstance.get("/auth/tokens");
+   return null
+  } catch (error:any) {
+    const message = error?.response?.data?.message ?? "Something went wrong";
+    throw new Error(message);
+  }
+}
+
 export async function getMe() {
   try {
     const res = await axiosInstance.get<Response<User>>("/auth/me");
